@@ -2,7 +2,7 @@
 # And wraps CodeInput + CodeOutput within CodeChunk
 
 library(stringr)
-process_code_blocks <- function(file_path, out_path = file_path) {
+process_code_blocks <- function(file_path, out_path = file_path, max_width = 76) {
   # Read file
   tex <- readLines(file_path, warn = FALSE)
   content <- paste(tex, collapse = "\n")
@@ -57,96 +57,37 @@ process_code_blocks <- function(file_path, out_path = file_path) {
       inside_env <- FALSE
     }
 
-    if (inside_env && nchar(line) > 70) {
-      # --- Replace column header 'Rhat' with '...' ---
-      if (grepl(" Rhat$", line)) {
-        lines[i] <- sub(" Rhat$", "...", line)
-      } else {
-        # --- Replace last numeric column with '...' (no extra spaces) ---
-        # Captures: beginning of line + everything up to the n_eff number + the number itself
-        lines[i] <- sub(
-          "^([[:alnum:]_\\[\\]\\-\\.]+\\s+.*?\\s)([0-9]+)\\s+[0-9\\.]+\\s*$",
-          "\\1\\2...",
-          line,
-          perl = TRUE
-        )
-      }
+    # If inside CodeOutput and line exceeds max_width, truncate
+    if (inside_env && nchar(line) > max_width) {
+      lines[i] <- paste0(substr(line, 1, max_width - 3), "...")
     }
   }
 
   writeLines(lines, out_path)
-  message("✔ Done: verbatim replaced and code blocks grouped/wrapped.")
+  message(
+    "✔ Done: verbatim replaced and code blocks grouped/wrapped in ",
+    out_path, ".")
 }
 
-# GOSHA: this already happens, so no need?
-# ## This function only make sures that
-# # R> lipids_queries |> plot()
-# # is followed by the plot
+fix_code_file <- function(file_path) {
+  # Read file into vector
+  lines <- readLines(file_path, warn = FALSE)
 
-# fix_latex_code_and_figure <- function(tex_path) {
-#   # Read the file
-#   lines <- readLines(tex_path)
+  # Replace 'echo: false' → 'echo: true'
+  lines <- gsub("echo:\\s*false", "echo: true", lines)
 
-#   # Define the pattern to find the exact code block
-#   code_start <- grep("^\\\\begin\\{CodeInput\\}", lines)
-#   code_end <- grep("^\\\\end\\{CodeInput\\}", lines)
-#   fig_start <- grep("^\\\\begin\\{figure\\}\\[H\\]", lines)
-#   fig_end <- grep("^\\\\end\\{figure\\}", lines)
+  # Replace 'include: false' → 'include: true'
+  lines <- gsub("include:\\s*false", "include: true", lines)
 
-#   # Now find the code block with "lipids_queries"
-#   target_code_block <- which(
-#     grepl("lipids_queries.*\\|>.*plot\\(\\)", lines)
-#   )
+  # Replace 'eval: false' → 'include: false'
+  lines <- gsub("eval:\\s*false", "include: false", lines)
 
-#   # Get the enclosing CodeInput block
-#   code_block_start <- max(code_start[code_start < target_code_block])
-#   code_block_end <- min(code_end[code_end > target_code_block])
+  # Write back to file
+  writeLines(lines, file_path)
+  message("✔ Done: updated echo/eval/include flags in ", file_path, ".")
 
-#   # Get the following figure block
-#   figure_block_start <- min(fig_start[fig_start > code_block_end])
-#   figure_block_end <- min(fig_end[fig_end > figure_block_start])
-
-#   # Extract figure filename and caption
-#   fig_lines <- lines[figure_block_start:figure_block_end]
-#   fig_file_line <- grep("\\includegraphics.*\\{(.*)\\}", fig_lines, value = TRUE)
-#   fig_caption_line <- grep("\\\\caption\\{.*\\}", fig_lines, value = TRUE)
-
-#   # Extract actual filename (e.g., paper_files/figure-pdf/queryplot-1.pdf)
-#   fig_file <- sub(".*\\{(.*)\\}.*", "\\1", fig_file_line)
-
-#   # Extract caption (e.g., Illustration of queries plotted.)
-#   fig_caption <- sub(".*\\\\caption\\{(.*)\\}.*", "\\1", fig_caption_line)
-
-#   # Construct the new block
-#   new_block <- c(
-#     "\\begin{figure}[H]",
-#     "\\noindent",
-#     "\\begin{minipage}{\\linewidth}",
-#     "\\vspace{1em}",
-#     "\\begin{CodeInput}",
-#     "R> lipids_queries |> plot()",
-#     "\\end{CodeInput}",
-#     "\\vspace{1em}",
-#     "\\centering",
-#     sprintf("\\includegraphics[keepaspectratio,width=0.9\\linewidth]{%s}", fig_file),
-#     sprintf("\\caption{%s}", fig_caption),
-#     "\\end{minipage}",
-#     "\\end{figure}"
-#   )
-
-#   # Replace original lines with new block
-#   lines <- c(
-#     lines[1:(code_block_start - 1)],
-#     new_block,
-#     lines[(figure_block_end + 1):length(lines)]
-#   )
-
-#   # Write back to file or new file
-#   writeLines(lines, tex_path)
-#   message("Updated .tex file written to: ", tex_path)
-# }
-
+}
 
 # Implement
 process_code_blocks("paper.tex", "CQ_JSS.tex")
-# fix_latex_code_and_figure("CQ_JSS.tex")
+fix_code_file("code.R")

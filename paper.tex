@@ -1,4 +1,5 @@
 % Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
@@ -6,21 +7,22 @@
 \documentclass[
   11pt,
   article]{jss}
-
+\usepackage{xcolor}
 \usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 \usepackage{iftex}
 \ifPDFTeX
   \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
   \usepackage{textcomp} % provide euro and other symbols
 \else % if luatex or xetex
-  \usepackage{unicode-math}
+  \usepackage{unicode-math} % this also loads fontspec
   \defaultfontfeatures{Scale=MatchLowercase}
   \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
 \fi
 \usepackage{lmodern}
-\ifPDFTeX\else  
-    % xetex/luatex font selection
+\ifPDFTeX\else
+  % xetex/luatex font selection
 \fi
 % Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
@@ -38,9 +40,6 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-\usepackage{xcolor}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 % Make \paragraph and \subparagraph free-standing
 \makeatletter
 \ifx\paragraph\undefined\else
@@ -66,8 +65,7 @@
 \makeatother
 
 
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{longtable,booktabs,array}
 \usepackage{calc} % for calculating minipage widths
 % Correct order of tables after \paragraph or \subparagraph
 \usepackage{etoolbox}
@@ -92,6 +90,19 @@
 % Set default figure placement to htbp
 \def\fps@figure{htbp}
 \makeatother
+
+
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+
 
 \usepackage{booktabs}
 \usepackage{longtable}
@@ -182,13 +193,11 @@
 \makeatletter
 \makeatother
 \makeatletter
-\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[frame hidden, borderline west={3pt}{0pt}{shadecolor}, enhanced, sharp corners, boxrule=0pt, breakable, interior hidden]}{\end{tcolorbox}}\fi
+\ifdefined\Shaded\renewenvironment{Shaded}{\begin{tcolorbox}[boxrule=0pt, borderline west={3pt}{0pt}{shadecolor}, breakable, sharp corners, interior hidden, frame hidden, enhanced]}{\end{tcolorbox}}\fi
 \makeatother
-
 \usepackage{bookmark}
-
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{same}
 \hypersetup{
   pdftitle={Making, Updating, and Querying Causal Models with },
   pdfauthor={Till Tietz; Lily Medina; Georgiy Syunyaev; Macartan Humphreys},
@@ -421,7 +430,7 @@ the local average treatment effects (LATE).
 label & query & given & mean & sd & cred.low & cred.high\\
 \midrule
 ATE & Y[X = 1] - Y[X = 0] & - & 0.55 & 0.10 & 0.37 & 0.73\\
-PoC & Y[X = 1] - Y[X = 0] & X == 0 \& Y == 0 & 0.63 & 0.15 & 0.38 & 0.89\\
+PoC & Y[X = 1] - Y[X = 0] & X == 0 \& Y == 0 & 0.64 & 0.15 & 0.37 & 0.89\\
 LATE & Y[X = 1] - Y[X = 0] & X[Z = 1] > X[Z = 0] & 0.70 & 0.05 & 0.59 & 0.80\\
 \bottomrule
 
@@ -897,28 +906,28 @@ the graph.
 \toprule
 node & nodal\_type & param\_set & param\_names & param\_value & priors\\
 \midrule
-Z & 0 & Z & Z.0 & 0.84 & 1\\
-Z & 1 & Z & Z.1 & 0.16 & 1\\
-X & 00 & X & X.00 & 0.12 & 1\\
-X & 10 & X & X.10 & 0.08 & 1\\
-X & 01 & X & X.01 & 0.11 & 1\\
-X & 11 & X & X.11 & 0.69 & 1\\
-Y & 00 & Y.X.00 & Y.00\_X.00 & 0.38 & 1\\
-Y & 10 & Y.X.00 & Y.10\_X.00 & 0.00 & 1\\
-Y & 01 & Y.X.00 & Y.01\_X.00 & 0.20 & 1\\
-Y & 11 & Y.X.00 & Y.11\_X.00 & 0.42 & 1\\
-Y & 00 & Y.X.01 & Y.00\_X.01 & 0.40 & 1\\
-Y & 10 & Y.X.01 & Y.10\_X.01 & 0.38 & 1\\
-Y & 01 & Y.X.01 & Y.01\_X.01 & 0.06 & 1\\
-Y & 11 & Y.X.01 & Y.11\_X.01 & 0.16 & 1\\
-Y & 00 & Y.X.10 & Y.00\_X.10 & 0.71 & 1\\
-Y & 10 & Y.X.10 & Y.10\_X.10 & 0.15 & 1\\
-Y & 01 & Y.X.10 & Y.01\_X.10 & 0.05 & 1\\
-Y & 11 & Y.X.10 & Y.11\_X.10 & 0.09 & 1\\
-Y & 00 & Y.X.11 & Y.00\_X.11 & 0.65 & 1\\
-Y & 10 & Y.X.11 & Y.10\_X.11 & 0.04 & 1\\
-Y & 01 & Y.X.11 & Y.01\_X.11 & 0.01 & 1\\
-Y & 11 & Y.X.11 & Y.11\_X.11 & 0.30 & 1\\
+Z & 0 & Z & Z.0 & 0.57 & 1\\
+Z & 1 & Z & Z.1 & 0.43 & 1\\
+X & 00 & X & X.00 & 0.24 & 1\\
+X & 10 & X & X.10 & 0.30 & 1\\
+X & 01 & X & X.01 & 0.20 & 1\\
+X & 11 & X & X.11 & 0.27 & 1\\
+Y & 00 & Y.X.00 & Y.00\_X.00 & 0.71 & 1\\
+Y & 10 & Y.X.00 & Y.10\_X.00 & 0.19 & 1\\
+Y & 01 & Y.X.00 & Y.01\_X.00 & 0.00 & 1\\
+Y & 11 & Y.X.00 & Y.11\_X.00 & 0.10 & 1\\
+Y & 00 & Y.X.01 & Y.00\_X.01 & 0.15 & 1\\
+Y & 10 & Y.X.01 & Y.10\_X.01 & 0.40 & 1\\
+Y & 01 & Y.X.01 & Y.01\_X.01 & 0.39 & 1\\
+Y & 11 & Y.X.01 & Y.11\_X.01 & 0.06 & 1\\
+Y & 00 & Y.X.10 & Y.00\_X.10 & 0.17 & 1\\
+Y & 10 & Y.X.10 & Y.10\_X.10 & 0.65 & 1\\
+Y & 01 & Y.X.10 & Y.01\_X.10 & 0.14 & 1\\
+Y & 11 & Y.X.10 & Y.11\_X.10 & 0.04 & 1\\
+Y & 00 & Y.X.11 & Y.00\_X.11 & 0.24 & 1\\
+Y & 10 & Y.X.11 & Y.10\_X.11 & 0.71 & 1\\
+Y & 01 & Y.X.11 & Y.01\_X.11 & 0.04 & 1\\
+Y & 11 & Y.X.11 & Y.11\_X.11 & 0.01 & 1\\
 \bottomrule
 
 
@@ -1537,9 +1546,9 @@ R> lipids_model |> make_data(n = 4)
 
 \begin{verbatim}
   Z X Y
-1 0 0 0
-2 0 0 1
-3 1 1 0
+1 0 1 1
+2 1 0 0
+3 1 1 1
 4 1 1 1
 \end{verbatim}
 
@@ -1581,16 +1590,16 @@ R> sample_data |> collapse_data(lipids_model)
 \begin{verbatim}
     event strategy count
 1  Z0X0Y0      ZXY     0
-2  Z1X0Y0      ZXY     1
+2  Z1X0Y0      ZXY     0
 3  Z0X1Y0      ZXY     0
-4  Z1X1Y0      ZXY     1
-5  Z0X0Y1      ZXY     0
+4  Z1X1Y0      ZXY     0
+5  Z0X0Y1      ZXY     1
 6  Z1X0Y1      ZXY     0
 7  Z0X1Y1      ZXY     0
 8  Z1X1Y1      ZXY     0
-9    Z0Y0       ZY     1
-10   Z1Y0       ZY     2
-11   Z0Y1       ZY     1
+9    Z0Y0       ZY     2
+10   Z1Y0       ZY     1
+11   Z0Y1       ZY     2
 12   Z1Y1       ZY     2
 \end{verbatim}
 
@@ -1769,11 +1778,12 @@ towards a belief that \(X\) causes \(Y\).
 
 \begin{CodeInput}
 R> data <- data.frame(X = rep(0:1, 5), Y = rep(0:1, 5))
-R> list(uncensored = update_model(make_model("X -> Y"), data),
-+    censored = update_model(make_model("X -> Y"), data, 
-+    censored_types = c("X1Y0",  "X0Y1"))) |>
+R> list(uncensored = update_model(make_model("X -> Y"), 
++    data = data, refresh = 0),
++    censored = update_model(make_model("X -> Y"), data = data, 
++    censored_types = c("X1Y0",  "X0Y1"), refresh = 0)) |>
 +    query_model("Y[X = 1] - Y[X = 0]", using = "posteriors") |>
-+    select(-using)
++    dplyr::select(-using)
 \end{CodeInput}
 
 \begin{verbatim}
@@ -1782,8 +1792,8 @@ Causal queries generated by query_model
 
 |model      |case_level |  mean|    sd| cred.low| cred.high|
 |:----------|:----------|-----:|-----:|--------:|---------:|
-|uncensored |FALSE      | 0.590| 0.194|    0.168|     0.897|
-|censored   |FALSE      | 0.018| 0.315|   -0.614|     0.629|
+|uncensored |FALSE      | 0.590| 0.196|    0.145|     0.897|
+|censored   |FALSE      | 0.015| 0.318|   -0.625|     0.641|
 \end{verbatim}
 
 \subsection{Output}\label{output}
@@ -1799,23 +1809,6 @@ R> model <- make_model("X -> Y") |> update_model()
 R> posterior <- inspect(model, "posterior_distribution")  
 \end{CodeInput}
 
-\begin{verbatim}
-
-posterior_distribution
-Summary statistics of model parameters posterior distributions:
-
-  Distributions matrix dimensions are 
-  4000 rows (draws) by 6 cols (parameters)
-
-     mean   sd
-X.0  0.51 0.28
-X.1  0.49 0.28
-Y.00 0.25 0.19
-Y.10 0.25 0.19
-Y.01 0.25 0.19
-Y.11 0.25 0.20
-\end{verbatim}
-
 Additionally, a distribution of causal types is stored by default.
 Optionally, the \texttt{stanfit} object and a distribution over event
 probabilities can also be saved as shown below:
@@ -1826,12 +1819,11 @@ R> lipids_model <- lipids_model |> update_model(
 \end{CodeInput}
 
 The summary of the Stan model can be accessed using \texttt{inspect()}
-function and is saved in the updated model object by default. This
-provides two measures to help assess convergence.
+function and is saved in the updated model object by default.
 
 \begin{CodeInput}
-R> make_model("X -> Y") |> update_model(keep_type_distribution = FALSE) |>
-+    inspect("stan_summary") 
+R> make_model("X -> Y") |> update_model(keep_type_distribution = FALSE, 
++    refresh = 0) |> inspect("stan_summary") 
 \end{CodeInput}
 
 \begin{verbatim}
@@ -1844,17 +1836,17 @@ Inference for Stan model: simplexes.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
                    mean se_mean   sd   2.5%   25%   50%   75% 97.5% n_eff Rhat
-X.0                0.50    0.01 0.29   0.03  0.25  0.49  0.74  0.97  3036 1.00
-X.1                0.50    0.01 0.29   0.03  0.26  0.51  0.75  0.97  3036 1.00
-Y.00               0.25    0.00 0.19   0.01  0.09  0.21  0.37  0.70  2031 1.00
-Y.10               0.25    0.00 0.19   0.01  0.09  0.21  0.37  0.71  4633 1.00
-Y.01               0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.72  4162 1.00
-Y.11               0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.71  4701 1.00
-lp__               1.00    0.02 0.96   0.03  0.30  0.72  1.39  3.43  2536 1.00
-log_sum_gammas[2]  1.85    0.03 1.19   0.36  1.00  1.58  2.41  4.93  1159 1.01
-lp__              -7.53    0.04 1.65 -11.75 -8.37 -7.15 -6.32 -5.44  1368 1.00
+X.0                0.49    0.01 0.29   0.02  0.24  0.49  0.75  0.97  2976 1.00
+X.1                0.51    0.01 0.29   0.03  0.25  0.51  0.76  0.98  2976 1.00
+Y.00               0.25    0.01 0.19   0.01  0.09  0.20  0.37  0.71  1419 1.00
+Y.10               0.25    0.00 0.19   0.01  0.09  0.20  0.37  0.71  4026 1.00
+Y.01               0.25    0.00 0.19   0.01  0.09  0.21  0.37  0.71  4142 1.00
+Y.11               0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.71  4265 1.00
+lp__               1.02    0.02 1.00   0.03  0.29  0.71  1.43  3.75  2419 1.00
+log_sum_gammas[2]  1.86    0.05 1.27   0.34  0.99  1.59  2.42  4.99   649 1.01
+lp__              -7.58    0.05 1.72 -11.74 -8.44 -7.17 -6.34 -5.43  1185 1.00
 
-Samples were drawn using NUTS(diag_e) at Wed Jul 30 10:29:24 2025.
+Samples were drawn using NUTS(diag_e) at Wed Jul 30 16:19:14 2025.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
@@ -1911,7 +1903,7 @@ Model has been updated and contains a posterior distribution with
 Use inspect(model, 'stan_summary') to inspect stan summary
 
 Warnings passed from rstan during updating:
-The largest R-hat is 1.73, indicating chains have not mixed
+The largest R-hat is 1.53, indicating chains have not mixed
 Bulk Effective Samples Size (ESS) is too low
 Tail Effective Samples Size (ESS) is too low 
 \end{verbatim}
@@ -1945,32 +1937,32 @@ Inference for Stan model: simplexes.
 post-warmup draws per chain=1000, total post-warmup draws=4000.
 
                    mean se_mean   sd   2.5%   25%   50%   75% 97.5% n_eff Rhat
-lambdas[1]         0.50    0.01 0.29   0.03  0.25  0.50  0.75  0.97  2558    1
-lambdas[2]         0.50    0.01 0.29   0.03  0.25  0.50  0.75  0.97  2558    1
-lambdas[3]         0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.71  2012    1
-lambdas[4]         0.26    0.00 0.20   0.01  0.10  0.21  0.38  0.72  4663    1
-lambdas[5]         0.25    0.00 0.20   0.01  0.08  0.20  0.37  0.71  4851    1
-lambdas[6]         0.25    0.00 0.19   0.01  0.09  0.20  0.36  0.71  4266    1
-log_sum_gammas[1]  0.99    0.02 0.99   0.03  0.28  0.69  1.37  3.68  2209    1
-log_sum_gammas[2]  1.87    0.03 1.21   0.34  0.99  1.61  2.45  5.02  1315    1
-types[1]           0.13    0.00 0.14   0.00  0.03  0.08  0.18  0.49  2317    1
-types[2]           0.12    0.00 0.13   0.00  0.02  0.07  0.18  0.49  2150    1
-types[3]           0.13    0.00 0.14   0.00  0.03  0.08  0.18  0.51  3350    1
-types[4]           0.13    0.00 0.13   0.00  0.03  0.08  0.18  0.50  3460    1
-types[5]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.49  3676    1
-types[6]           0.12    0.00 0.14   0.00  0.02  0.08  0.18  0.51  3694    1
-types[7]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.47  3424    1
-types[8]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.49  3166    1
-lp__              -7.55    0.05 1.66 -11.87 -8.39 -7.15 -6.33 -5.45  1357    1
+lambdas[1]         0.50    0.01 0.29   0.03  0.25  0.49  0.74  0.97  3036 1.00
+lambdas[2]         0.50    0.01 0.29   0.03  0.26  0.51  0.75  0.97  3036 1.00
+lambdas[3]         0.25    0.00 0.19   0.01  0.09  0.21  0.37  0.70  2031 1.00
+lambdas[4]         0.25    0.00 0.19   0.01  0.09  0.21  0.37  0.71  4633 1.00
+lambdas[5]         0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.72  4162 1.00
+lambdas[6]         0.25    0.00 0.20   0.01  0.09  0.20  0.37  0.71  4701 1.00
+log_sum_gammas[1]  1.00    0.02 0.96   0.03  0.30  0.72  1.39  3.43  2536 1.00
+log_sum_gammas[2]  1.85    0.03 1.19   0.36  1.00  1.58  2.41  4.93  1159 1.01
+types[1]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.50  2065 1.00
+types[2]           0.13    0.00 0.13   0.00  0.03  0.08  0.18  0.48  2390 1.00
+types[3]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.50  3785 1.00
+types[4]           0.13    0.00 0.13   0.00  0.03  0.08  0.18  0.49  3407 1.00
+types[5]           0.12    0.00 0.13   0.00  0.03  0.08  0.18  0.48  3507 1.00
+types[6]           0.13    0.00 0.13   0.00  0.03  0.08  0.18  0.49  3619 1.00
+types[7]           0.12    0.00 0.13   0.00  0.03  0.08  0.17  0.49  3841 1.00
+types[8]           0.13    0.00 0.13   0.00  0.03  0.08  0.19  0.49  3863 1.00
+lp__              -7.53    0.04 1.65 -11.75 -8.37 -7.15 -6.32 -5.44  1368 1.00
 
-Samples were drawn using NUTS(diag_e) at Wed Jul 30 10:29:44 2025.
+Samples were drawn using NUTS(diag_e) at Wed Jul 30 16:19:16 2025.
 For each parameter, n_eff is a crude measure of effective sample size,
 and Rhat is the potential scale reduction factor on split chains (at 
 convergence, Rhat=1).
 \end{verbatim}
 
 Users can then pass the \texttt{stanfit} object to other diagnostic
-packages such as \texttt{bayesplot}.
+packages such as \pkg{bayesplot}.
 
 \section{Queries}\label{sec-query}
 
@@ -2341,7 +2333,7 @@ the belief about this new case.
 
 \begin{CodeInput}
 R> make_model("X -> M -> Y") |> update_model(
-+    data.frame(X = rep(0:1, 8), Y = rep(0:1, 8)), iter = 4000) |>
++    data.frame(X = rep(0:1, 8), Y = rep(0:1, 8)), iter = 4000, refresh = 0) |>
 +    query_model("Y[X = 1] > Y[X = 0] :|: X == 1 & Y == 1 & M == 1", 
 +    using = "posteriors", case_level = c(TRUE, FALSE)) |>
 +    plot()
@@ -2393,10 +2385,14 @@ Table~\ref{tbl-batch-query} then shows the output from a single call to
 \texttt{TRUE} to generate all combinations of list elements.
 
 \begin{CodeInput}
-R> queries <- query_model(models, query = 
-+    list(ATE = "Y[X=1] - Y[X=0]", 
+R> queries <- 
+R> query_model(
++    models, 
++    query = list(
++    ATE = "Y[X=1] - Y[X=0]", 
 +    POS = "Y[X=1] > Y[X=0] :|: Y==1 & X==1"),
-+    case_level = c(FALSE, TRUE), using = c("priors", "posteriors"),
++    case_level = c(FALSE, TRUE), 
++    using = c("priors", "posteriors"),
 +    expand_grid = TRUE)
 \end{CodeInput}
 
@@ -2408,7 +2404,7 @@ label & model & query & given & using & case\_level & mean\\
 ATE & Unrestricted & Y[X=1] - Y[X=0] & - & priors & FALSE & 0.00\\
 ATE & Restricted & Y[X=1] - Y[X=0] & - & priors & FALSE & 0.00\\
 ATE & Unrestricted & Y[X=1] - Y[X=0] & - & posteriors & FALSE & 0.56\\
-ATE & Restricted & Y[X=1] - Y[X=0] & - & posteriors & FALSE & 0.56\\
+ATE & Restricted & Y[X=1] - Y[X=0] & - & posteriors & FALSE & 0.55\\
 POS & Unrestricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & priors & FALSE & 0.50\\
 POS & Restricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & priors & FALSE & 0.49\\
 POS & Unrestricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & posteriors & FALSE & 0.95\\
@@ -2416,7 +2412,7 @@ POS & Restricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & posteriors & FALSE & 0.95\\
 ATE & Unrestricted & Y[X=1] - Y[X=0] & - & priors & TRUE & 0.00\\
 ATE & Restricted & Y[X=1] - Y[X=0] & - & priors & TRUE & 0.00\\
 ATE & Unrestricted & Y[X=1] - Y[X=0] & - & posteriors & TRUE & 0.56\\
-ATE & Restricted & Y[X=1] - Y[X=0] & - & posteriors & TRUE & 0.56\\
+ATE & Restricted & Y[X=1] - Y[X=0] & - & posteriors & TRUE & 0.55\\
 POS & Unrestricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & priors & TRUE & 0.50\\
 POS & Restricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & priors & TRUE & 0.49\\
 POS & Unrestricted & Y[X=1] > Y[X=0] & Y==1 \& X==1 & posteriors & TRUE & 0.95\\
@@ -2644,7 +2640,7 @@ the Comprehensive \proglang{R} Archive Network (CRAN) at
 \section*{Acknowledgments}\label{acknowledgments}
 \addcontentsline{toc}{section}{Acknowledgments}
 
-\begin{tcolorbox}[enhanced jigsaw, colback=white, bottomrule=.15mm, leftrule=.75mm, breakable, opacityback=0, arc=.35mm, left=2mm, colframe=quarto-callout-color-frame, rightrule=.15mm, toprule=.15mm]
+\begin{tcolorbox}[enhanced jigsaw, colback=white, rightrule=.15mm, toprule=.15mm, left=2mm, bottomrule=.15mm, breakable, arc=.35mm, leftrule=.75mm, colframe=quarto-callout-color-frame, opacityback=0]
 
 We thank Ben Goodrich, who provided generous insights on using
 \texttt{stan} for this project. We thank Alan M Jacobs for key work in
@@ -2849,9 +2845,9 @@ data.
 \toprule
 Model & Number of parameters & Runtime (seconds)\\
 \midrule
-X1 → Y & 6 & 7.33\\
-X1 → Y; X2 → Y & 20 & 8.66\\
-X1 → Y; X2 → Y; X3 → Y & 262 & 59.96\\
+X1 → Y & 6 & 934.35\\
+X1 → Y; X2 → Y & 20 & 2152.34\\
+X1 → Y; X2 → Y; X3 → Y & 262 & 50556.00\\
 \bottomrule
 
 
@@ -2865,10 +2861,10 @@ X1 → Y; X2 → Y; X3 → Y & 262 & 59.96\\
 \toprule
 Model & Number of observations & Runtime (seconds)\\
 \midrule
-X1 → Y & 10 & 8.95\\
-X1 → Y & 100 & 7.77\\
-X1 → Y & 1000 & 10.80\\
-X1 → Y & 10000 & 11.13\\
+X1 → Y & 10 & 724.55\\
+X1 → Y & 100 & 791.52\\
+X1 → Y & 1000 & 1629.63\\
+X1 → Y & 10000 & 3743.58\\
 \bottomrule
 
 

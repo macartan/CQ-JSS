@@ -7,3 +7,5 @@ paper_files/
 /.quarto/
 /archive/
 .vscode/
+
+/.luarc.json
